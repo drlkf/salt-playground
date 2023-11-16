@@ -1,0 +1,54 @@
+---
+driver:
+  name: vagrant
+
+transport:
+  name: ssh
+
+verifier:
+  name: inspec
+
+provisioner:
+  name: salt_solo
+  salt_install: distrib
+  require_chef: false
+  is_file_root: true
+  local_salt_root: .
+  pillars_from_directories:
+    - pillar
+
+  init_environment: |
+    if ! command -v wget >/dev/null; then
+      sudo apt-get update
+      sudo apt-get install -y wget
+    fi
+
+    sudo wget -q \
+      -O /etc/apt/trusted.gpg.d/saltstack.asc \
+      https://repo.saltproject.io/salt/py3/debian/11/amd64/3006/SALT-PROJECT-GPG-PUBKEY-2023.pub
+    echo deb https://repo.saltproject.io/salt/py3/debian/11/amd64/3006 bullseye main | sudo tee /etc/apt/sources.list.d/saltstack.list
+    sudo apt-get update
+    sed -Ei 's/#(alias ll)/\1/' .bashrc
+
+  install_after_init_environment: true
+
+platforms:
+  - name: debian-12
+
+suites:
+  - name: base
+    provisioner:
+      pillars:
+        top.sls:
+          base:
+            '*':
+              - salt
+      state_top:
+        base:
+          '*':
+            - salt
+
+    verifier:
+      inspec_tests:
+        - test/inspec/salt/master
+        - test/inspec/salt/minion

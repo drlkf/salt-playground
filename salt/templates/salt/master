@@ -1,0 +1,35 @@
+open_mode: true
+log_level: info
+git_pillar_provider: gitpython
+pillar_raise_on_missing: true
+pillar_merge_lists: true
+
+extension_modules: {{ extensions_dir }}
+pillarenv_from_saltenv: true
+top_file_merging_strategy: same
+
+fileserver_backend:
+  - gitfs
+
+gitfs_saltenv:
+{%- for env in environments %}
+  - {{ env.name }}:
+    - ref: {{ env.branch }}
+{%- endfor %}
+
+ext_pillar:
+  - git:
+{%- for env in environments %}
+    - {{ env.branch }} https://{{ source }}:
+      - env: {{ env.name }}
+{%- endfor %}
+  - toto: {}
+
+git_pillar_root: pillar
+gitfs_root: salt
+gitfs_update_interval: 60
+gitfs_ref_types:
+  - branch
+
+gitfs_remotes:
+  - https://{{ source }}
