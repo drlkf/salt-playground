@@ -1,0 +1,3 @@
+echo dev:
+  cmd:
+    - run

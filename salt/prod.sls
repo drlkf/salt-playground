@@ -1,0 +1,3 @@
+echo prod:
+  cmd:
+    - run

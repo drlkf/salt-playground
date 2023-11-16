@@ -1,0 +1,3 @@
+echo staging:
+  cmd:
+    - run
