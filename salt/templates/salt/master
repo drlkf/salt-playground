@@ -17,13 +17,13 @@ fileserver_backend:
 gitfs_saltenv:
 {%- for env in environments %}
   - {{ env.name }}:
-    - ref: {{ env.branch }}
+    - ref: {{ env.ref }}
 {%- endfor %}
 
 ext_pillar:
   - git:
 {%- for env in environments %}
-    - {{ env.branch }} https://{{ source }}:
+    - {{ env.ref }} https://{{ source }}:
       - env: {{ env.name }}
 {%- endfor %}
   - toto: {}

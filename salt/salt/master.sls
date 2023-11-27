@@ -18,11 +18,11 @@ salt-master:
         extensions_dir: /usr/local/lib/salt/extensions
         environments:
           - name: dev
-            branch: develop
+            ref: develop
           - name: stg
-            branch: staging
+            ref: staging
           - name: prd
-            branch: master
+            ref: production
 
     - require:
       - pkg: salt-master
