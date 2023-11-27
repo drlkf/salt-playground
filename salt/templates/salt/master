@@ -8,6 +8,9 @@ extension_modules: {{ extensions_dir }}
 pillarenv_from_saltenv: true
 top_file_merging_strategy: same
 
+event_return: rawfile_json
+rawfile_json.filename: /var/run/salt/events.json
+
 fileserver_backend:
   - gitfs
 
